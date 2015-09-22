@@ -1,0 +1,7 @@
+{
+  "name":"afrostream-api-stats",
+  "description":"app json review app env vars",
+  "scripts":{},
+  "env":{},
+  "addons":[]
+}
