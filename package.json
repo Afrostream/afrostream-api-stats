@@ -1,0 +1,33 @@
+{
+  "name": "afrostream-api-stats",
+  "version": "1.0.0",
+  "description": "nodejs micro server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node_modules/.bin/pm2-dev run app.js",
+    "test": "mocha test/integration"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Afrostream/afrostream-api-stats.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Afrostream/afrostream-api-stats/issues"
+  },
+  "homepage": "https://github.com/Afrostream/afrostream-api-stats#readme",
+  "dependencies": {
+    "better-assert": "^1.0.2",
+    "body-parser": "^1.14.0",
+    "express": "^4.13.3",
+    "lodash": "^3.10.1",
+    "pm2": "^0.14.7"
+  },
+  "devDependencies": {
+    "mocha": "^2.3.3",
+    "q": "^1.4.1",
+    "supertest": "^1.1.0"
+  }
+}
