@@ -17,7 +17,7 @@ var conf = {
   apps: [
     {
       name: "afrostream-api-stats",
-      script: "./app.js",
+      script: "./app/index.js",
       exec_mode: "cluster",
       autorestart: true
     }

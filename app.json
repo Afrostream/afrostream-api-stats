@@ -2,6 +2,9 @@
   "name":"afrostream-api-stats",
   "description":"app json review app env vars",
   "scripts":{},
-  "env":{},
+  "env":{
+    "NODE_ENV": "staging",
+    "DATABASE_URL": "fixme"
+  },
   "addons":[]
 }

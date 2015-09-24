@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node_modules/.bin/pm2-dev run app.js",
+    "dev": "node_modules/.bin/pm2-dev run index/index.js",
     "test": "mocha test/integration"
   },
   "repository": {
@@ -22,7 +22,9 @@
     "better-assert": "^1.0.2",
     "body-parser": "^1.14.0",
     "express": "^4.13.3",
+    "knex": "^0.8.6",
     "lodash": "^3.10.1",
+    "pg": "^4.4.2",
     "pm2": "^0.14.7"
   },
   "devDependencies": {

@@ -1,5 +1,9 @@
 'use strict';
 
 module.exports = {
-  allowOrigin: '*'
+  allowOrigin: '*',
+  knex: {
+    client: 'pg',
+    connection: 'postgres://postgres:root@localhost:5432/cdnselector'
+  }
 };

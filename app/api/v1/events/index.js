@@ -2,15 +2,19 @@
 
 var router = require('express').Router();
 
-var registry = rootRequire('fake-registry.js');
+var registry = rootRequire('registry.js');
 
 router.post('/', function (req, res) {
-  var event = registry.createEvent(req.body);
-  res.json(event);
+  registry.createEvent(req.body).then(
+    function success(id) { res.json({id: id}); },
+    res.error
+  );
 });
 router.get('/:id', function (req, res) {
-  var event = registry.getEvent(req.params.id);
-  res.json(event ? event : {error:'unknown event'});
+  registry.getEvent(req.params.id).then(
+    function success(event) { res.json(event[0]); },
+    res.error
+  );
 });
 
 module.exports = router;
