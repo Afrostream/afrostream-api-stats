@@ -13,7 +13,13 @@ router.get('/random', require('./random.js'));
 
 router.get('/:id', function (req, res) {
   new Event({id: req.params.id}).fetch().then(
-    function (m) { res.json(m.toJSON()); },
+    function (m) {
+      if (m) {
+        res.json(m.toJSON());
+      } else {
+        res.json({});
+      }
+    },
     res.error
   );
 });
