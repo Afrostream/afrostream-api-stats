@@ -2,17 +2,18 @@
 
 var router = require('express').Router();
 
-var registry = rootRequire('registry.js');
+var models = rootRequire('models.js')
+  , Event = models.Event;
 
 router.post('/', function (req, res) {
-  registry.createEvent(req.body).then(
-    function success(id) { res.json({id: id}); },
-    res.error
-  );
+  res.error('fixme');
 });
+
+router.get('/random', require('./random.js'));
+
 router.get('/:id', function (req, res) {
-  registry.getEvent(req.params.id).then(
-    function success(event) { res.json(event[0]); },
+  new Event({id: req.params.id}).fetch().then(
+    function (m) { res.json(m.toJSON()); },
     res.error
   );
 });
