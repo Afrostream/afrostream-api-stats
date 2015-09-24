@@ -4,7 +4,7 @@
   "description": "nodejs micro server",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node app/index.js",
     "dev": "node_modules/.bin/pm2-dev run index/index.js",
     "test": "mocha test/integration"
   },

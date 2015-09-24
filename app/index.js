@@ -15,6 +15,8 @@ rootRequire('/config/express.js')(app);
 // routes
 require('./routes.js')(app);
 
+console.log('trying to bind to '+config.port);
+
 // opening port
 app.listen(config.port, function() {
   console.log('Node app is running on port', config.port);
