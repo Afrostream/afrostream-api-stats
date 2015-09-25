@@ -9,8 +9,6 @@ router.post('/', function (req, res) {
   res.error('fixme');
 });
 
-router.get('/random', require('./random.js'));
-
 router.get('/:id', function (req, res) {
   new Event({id: req.params.id}).fetch().then(
     function (m) {

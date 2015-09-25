@@ -1,0 +1,20 @@
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+</head>
+<body>
+    <div id="result"></div>
+    <script>
+        var refresh = function () {
+            $.get('/test/stats').then(function (data) {
+                var html = '<table>' + Object.keys(data).reduce(function (p, k) {
+                    return p+'<tr><td>'+k+'</td><td>'+data[k]+'</td></tr>';
+                }, '') + '</table>';
+                $("#result").html(html);
+            });
+        };
+        setInterval(refresh, 1000);
+        refresh();
+    </script>
+</body>
+</html>

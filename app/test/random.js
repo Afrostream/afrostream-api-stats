@@ -9,6 +9,7 @@ var models = rootRequire('models.js')
 
 // ugly, but functionnal :)
 var nbFakeUsers = 5;
+Array.create = function (length, val) { return Array.apply(null, Array(length)).map(function () { return val; }); }
 var randomInteger = function () { return Math.round(Math.random() * 1000000); };
 var randomSmallInteger = function () { return Math.round(Math.random() * 255); };
 var randomPick = function (a) { return a[Math.floor(Math.random() * a.length)]; };
@@ -18,7 +19,7 @@ var chance = function (percent) { return Boolean(Math.random() < percent / 100);
 var fqdns = ['cdn1.afrostream.tv', 'cdn2.afrostream.tv', 'cdn3.afrostream.tv'];
 var countries = ['FR', 'FR', 'FR', 'FR', 'FR', 'BE', 'US'];
 var protocols = ['http', 'https'];
-var u = Array.apply(null, Array(nbFakeUsers));
+var u = Array.create(nbFakeUsers);
 var user_ids = u.map(randomInteger);
 var user_fqdn = u.map(randomPick.bind(null, fqdns));
 var user_ips = u.map(randomIp);
@@ -39,7 +40,88 @@ addEvent('buffering', 10);
 addEvent('bandwidthIncrease', 30);
 addEvent('bandwidthDecrease', 30);
 
-module.exports = function random(req, res) {
+// updated every seconds
+var stats = {
+  nbRequests: 0,
+  nbRequestsLastSec: 0,                // auto (computed in the set Interval)
+  avgRequestResponseTimeLastSecond: 0, // auto (computed in the set Interval)
+  nbInserts: 0,
+  nbInsertsLastSec: 0,                 // auto (computed in the set Interval)
+  avgInsertResponseTimeLastSecond: 0,  // auto (computed in the set Interval)
+  nbPendingInserts: 0,
+  nbPendingClients: 0,
+  last10RequestsResponseTime: Array.create(10, 0),
+  last10InsertTime: Array.create(10, 0),
+  cumulatedRequestResponseTime: 0,
+  cumulatedInsertResponseTime: 0,
+  nbRequestsBeforeLastSec: 0,
+  nbInsertsBeforeLastSec: 0,
+  cumulatedRequestResponseTimeBeforeLastSec: 0,
+  cumulatedInsertResponseTimeBeforeLastSec: 0
+};
+
+setInterval(function () {
+  stats.nbRequestsLastSec = stats.nbRequests - stats.nbRequestsBeforeLastSec;
+  stats.nbInsertsLastSec = stats.nbInserts - stats.nbInsertsBeforeLastSec;
+  stats.avgRequestResponseTimeLastSecond = (stats.cumulatedRequestResponseTime -stats.cumulatedRequestResponseTimeBeforeLastSec) / stats.nbRequestsLastSec;
+  stats.avgInsertResponseTimeLastSecond = (stats.cumulatedInsertResponseTime - stats.cumulatedInsertResponseTimeBeforeLastSec) / stats.nbInsertsLastSec;
+  stats.nbRequestsBeforeLastSec = stats.nbRequests;
+  stats.nbInsertsBeforeLastSec = stats.nbInserts;
+  stats.cumulatedRequestResponseTimeBeforeLastSec = stats.cumulatedRequestResponseTime;
+  stats.cumulatedInsertResponseTimeBeforeLastSec = stats.cumulatedInsertResponseTime;
+}, 1000);
+
+module.exports.getStats = function getStats(req, res) { res.json(stats); };
+
+module.exports.insertRandomData = function insertRandomData(req, res) {
+  // stats funcs.
+  var pendingInserts = 0;
+  var startInsertTime;
+  var beforeInsert = function () {
+    addPendingInsert();
+    startInsertTime = new Date();
+  };
+  var afterInsert = function () {
+    removePendingInsert();
+    stats.nbInserts++;
+    var insertTime = new Date() - startInsertTime;
+    stats.cumulatedInsertResponseTime += insertTime;
+    stats.last10InsertTime.shift();
+    stats.last10InsertTime.push(insertTime);
+  };
+  var addPendingInsert = function () {
+    pendingInserts++;
+    stats.nbPendingInserts++;
+  };
+  var removePendingInsert = function () {
+    pendingInserts--;
+    stats.nbPendingInserts--;
+  };
+  var removeAllPendingInsert = function () {
+    while (pendingInserts > 0) {
+      removePendingInsert();
+    }
+  };
+  var startTime;
+  var startRequest = function () {
+    startTime = new Date();
+    stats.nbPendingClients++;
+  };
+  var endRequest = function () {
+    removeAllPendingInsert();
+    stats.nbRequests++;
+    var responseTime = new Date() - startTime;
+    stats.cumulatedRequestResponseTime += responseTime;
+    stats.last10RequestsResponseTime.shift();
+    stats.last10RequestsResponseTime.push(responseTime);
+    stats.nbPendingClients--;
+  };
+
+
+  // STARTING
+
+  startRequest();
+
   var eventType = randomPick(events);
   var userId = randomPick(user_ids);
   var userIndex = user_ids.indexOf(userId);
@@ -62,8 +144,9 @@ module.exports = function random(req, res) {
         country: user_countries[userIndex],
         asn: user_asns[userIndex]
       });
-      //
+      beforeInsert();
       p = event.save().then(function (model) {
+        afterInsert();
         eventId = model.id;
         var eventBandwidth = new EventBandwidth({
           event_id: model.id,
@@ -71,7 +154,11 @@ module.exports = function random(req, res) {
           audio_bitrate: randomInteger()
         });
         additionnalEvent = eventBandwidth;
-        return eventBandwidth.save();
+        beforeInsert();
+        return eventBandwidth.save().then(function (o) {
+          afterInsert();
+          return o;
+        });
       });
       break;
     case 'bandwidthDecrease':
@@ -87,7 +174,9 @@ module.exports = function random(req, res) {
         asn: user_asns[userIndex]
       });
       //
+      beforeInsert();
       p = event.save().then(function (model) {
+        afterInsert();
         eventId = model.id;
         var eventBandwidth = new EventBandwidth({
           event_id: model.id,
@@ -95,7 +184,11 @@ module.exports = function random(req, res) {
           audio_bitrate: randomInteger()
         });
         additionnalEvent = eventBandwidth;
-        return eventBandwidth.save();
+        beforeInsert();
+        return eventBandwidth.save().then(function (o) {
+          afterInsert();
+          return o;
+        });
       });
       break;
     case 'error':
@@ -111,8 +204,9 @@ module.exports = function random(req, res) {
         asn: user_asns[userIndex]
       });
       //
-      p = event.save();
+      beforeInsert();
       p = event.save().then(function (model) {
+        afterInsert();
         eventId = model.id;
         var eventError = new EventError({
           event_id: model.id,
@@ -120,7 +214,11 @@ module.exports = function random(req, res) {
           message: "random error text (" + randomInteger() +")"
         });
         additionnalEvent = eventError;
-        return eventError.save();
+        beforeInsert();
+        return eventError.save().then(function (o) {
+          afterInsert();
+          return o;
+        });
       });
       break;
     case 'buffering':
@@ -136,7 +234,11 @@ module.exports = function random(req, res) {
         asn: user_asns[userIndex]
       });
       //
-      p = event.save();
+      beforeInsert();
+      p = event.save().then(function (o) {
+        afterInsert();
+        return o;
+      });
       break;
     case 'start':
       // randomizing url
@@ -160,8 +262,9 @@ module.exports = function random(req, res) {
         country: user_countries[userIndex],
         asn: user_asns[userIndex]
       });
-
+      beforeInsert();
       p = event.save().then(function (model) {
+        afterInsert();
         eventId = model.id;
         var eventStart = new EventStart({
           event_id: model.id,
@@ -175,7 +278,11 @@ module.exports = function random(req, res) {
           html5_video: chance(50)
         });
         additionnalEvent = eventStart;
-        return eventStart.save();
+        beforeInsert();
+        return eventStart.save().then(function (o) {
+          afterInsert();
+          return o;
+        });
       });
       break;
     case 'stop':
@@ -191,7 +298,9 @@ module.exports = function random(req, res) {
         asn: user_asns[userIndex]
       });
       //
+      beforeInsert();
       p = event.save().then(function (model) {
+        afterInsert();
         eventId = model.id;
         var eventStop = new EventStop({
           event_id: model.id,
@@ -199,13 +308,18 @@ module.exports = function random(req, res) {
           frames_dropped: randomSmallInteger()
         });
         additionnalEvent = eventStop;
-        return eventStop.save();
+        beforeInsert();
+        return eventStop.save().then(function (o) {
+          afterInsert();
+          return o;
+        });
       });
       break;
   }
 
   p.then(
     function success(id) {
+      endRequest();
       var j = event.toJSON();
       console.log('event created: '+JSON.stringify(j));
       if (additionnalEvent) {
@@ -213,6 +327,9 @@ module.exports = function random(req, res) {
       }
       res.json(j);
     },
-    res.error
+    function (err) {
+      endRequest();
+      res.error(err);
+    }
   );
 };

@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = function (app) {
+  app.use('/test', require('./test'));
   // REST
   app.use('/api/v1/events', require('./api/v1/events/index.js'));
   // NON-REST (bulk send)
@@ -9,8 +10,6 @@ module.exports = function (app) {
   app.get('/api/v1/getServersList', require('./api/v1/getserverslist.js'));
   //
   app.get('/alive', require('./alive.js'));
-  //
-  app.use('/admin', require('./admin'));
 
   // All other routes should have a 404 (not found) message
   app.route('/*')
