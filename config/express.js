@@ -5,6 +5,8 @@ var domain = require('domain');
 var compression = require('compression')
   , bodyParser = require('body-parser');
 
+var toobusy = require('toobusy-js');
+
 var config = rootRequire('/config');
 
 var allowCrossDomain = function (req, res, next) {
@@ -33,7 +35,7 @@ var catchAll = function (req, res, next) {
     console.error('Error', err, req.url);
     try {
       res.type('application/json; charset=utf-8');
-      res.status(500).json({error:String(err)});
+      res.error(err);
     } catch (er) {
       console.error('Error sending 500', err, req.url);
     }
@@ -46,13 +48,27 @@ var catchAll = function (req, res, next) {
  */
 var error = function (req, res, next) {
   res.error = function (msg) {
-    res.status(500).json({error: msg || 'unknown error'});
+    res.status(500).json({error: String(msg) || 'unknown error'});
   };
   next();
 };
 
+/**
+ * setting up express app middlewares
+ * @param app
+ */
 module.exports = function (app) {
-  // first: error handler
+  // first middleware : are we overloaded ?
+  app.use(function(req, res, next) {
+    if (toobusy()) {
+      res.status(503).json({error:'toobusy'});
+    } else {
+      next();
+    }
+  });
+
+  // req.error error handler
+  app.use(error);
   app.use(catchAll);
 
   // parsing POST data
