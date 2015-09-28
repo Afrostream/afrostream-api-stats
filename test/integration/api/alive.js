@@ -2,8 +2,9 @@
 
 // bootstrapping the tests (env var, ,..)
 require('../../bootstrap.js');
+
 // requesting app
-var app = rootRequire('/app');
+var app = rootRequire('app/index.js');
 
 // third party
 var request = require('supertest');

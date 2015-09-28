@@ -27,6 +27,8 @@ NON REST (bulk send)
 
 # Testing
 
+Warning: current integration tests are using the local development database.
+
 ## all
 
 ```

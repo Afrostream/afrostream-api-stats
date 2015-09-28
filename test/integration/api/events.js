@@ -4,8 +4,9 @@ var assert = require('better-assert');
 
 // bootstrapping the tests (env var, ,..)
 require('../../bootstrap.js');
+
 // requesting app
-var app = rootRequire('/app');
+var app = rootRequire('app/index.js');
 
 // third party
 var request = require('supertest');
@@ -17,7 +18,8 @@ faker.locale = "fr";
 describe('/api/v1/events', function () {
   var user_id = faker.random.number()
     , fqdn = faker.internet.domainName()
-    , relative_url = faker.internet.url();
+    , relative_url = faker.internet.url()
+    , ip = faker.internet.ip();
 
   describe('POST event bandwidthIncrease', function () {
     var video_bitrate = faker.random.number()
@@ -32,7 +34,7 @@ describe('/api/v1/events', function () {
          user_id : user_id,
          type : 'bandwidthIncrease',
          fqdn : fqdn,
-         relative_url: relative_url,
+         ip: ip,
          video_bitrate : video_bitrate,
          audio_bitrate : audio_bitrate
        })
@@ -46,18 +48,22 @@ describe('/api/v1/events', function () {
     });
 
     it('should be readable', function (done) {
-      request(app)
-        .get('/api/v1/events/'+eventId)
-        .expect('Content-Type', /json/)
-        .expect(200)
-        .expect(function(res) {
-          assert(res.body.id === eventId);
-          assert(res.body.clientId === clientId);
-          assert(res.body.type === eventType);
-          assert(res.body.videoBitrate === videoBitrate);
-          assert(res.body.audioBitrate === audioBitrate);
-        })
-        .end(done);
+      // directly check in the database
+      var models = rootRequire('models.js');
+      var Event = models.Event;
+      var EventBandwidth = models.EventBandwidth;
+
+      new Event({id: eventId}).fetch().then(function (e) {
+        assert(e.get('id') === eventId);
+        assert(e.get('user_id') === user_id);
+        assert(e.get('ip').indexOf(ip) !== -1); // ip could be transformed
+        assert(e.get('type') === 'bandwidthIncrease');
+        assert(e.get('fqdn') === fqdn);
+        return new EventBandwidth({event_id: eventId}).fetch().then(function (e) {
+          assert(e.get('video_bitrate') === video_bitrate);
+          assert(e.get('audio_bitrate') === audio_bitrate);
+        });
+      }).then(done);
     });
   });
 });

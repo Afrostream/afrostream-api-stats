@@ -10,7 +10,7 @@ var Event = models.Event
 var createEvent = function (req) {
   return new Event({
     user_id: req.body.user_id,
-    ip: req.ip,
+    ip: req.body.ip || req.ip, // FIXME: req.body.ip is used for testing.
     fqdn: req.body.fqdn,
     type: req.body.type,
     // FIXME: geoip.

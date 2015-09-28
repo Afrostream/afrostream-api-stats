@@ -7,6 +7,7 @@ var validateBodyEventBandwidthIncrease = validate({
   body: {
     type: Joi.string().equal('bandwidthIncrease').required(),
     user_id: Joi.number().integer().positive().required(),
+    ip: Joi.string().ip().optional(),
     fqdn: Joi.string().max(255).required(),
     video_bitrate: Joi.number().integer().positive().required(),
     audio_bitrate: Joi.number().integer().positive().required()

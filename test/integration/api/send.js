@@ -16,6 +16,7 @@ var eventsType = ['bandwidthIncrease', 'bandwidthDecrease', 'error', 'buffering'
 
 describe('/api/v1/send', function () {
   describe('POST multiple events (bulk)', function () {
+    /*
     var events = Array.apply(null, {length:5})
       .map(function () {
         return {
@@ -46,7 +47,7 @@ describe('/api/v1/send', function () {
        })
        .end(done);
     });
-
+*/
     it('should be readable', function (done) {
       // FIXME: something like that... :)
       /*

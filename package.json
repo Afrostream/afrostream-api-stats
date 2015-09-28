@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node_modules/.bin/nodemon app/index.js",
-    "test": "mocha test/integration"
+    "test": "mocha -b test/integration"
   },
   "repository": {
     "type": "git",

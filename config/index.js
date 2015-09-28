@@ -3,15 +3,7 @@
 var _ = require('lodash');
 
 var all = {
-  port: process.env.PORT || 3003,
-  knex: {
-    client: 'pg',
-    connection: process.env.DATABASE_URL || 'postgres://postgres:root@localhost:5432/cdnselector',
-    pool: {
-      min: 1,
-      max: 2
-    }
-  }
+  port: process.env.PORT || 3003
 };
 
 module.exports = _.merge(
