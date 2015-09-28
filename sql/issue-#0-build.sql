@@ -15,15 +15,15 @@ CREATE TYPE uri_scheme AS ENUM
     'https');
 -- ALTER TYPE uri_scheme OWNER TO postgres;
 
+-- drop table event; drop table event_bandwidth; drop table event_error; drop table event_start; drop table event_stop;
+
 -- table
 CREATE TABLE event
 (
   id bigserial NOT NULL,
   user_id integer NOT NULL,
   ip cidr NOT NULL,
-  protocol uri_scheme NOT NULL DEFAULT 'https'::uri_scheme,
   fqdn character varying(255) NOT NULL,
-  relative_url character varying(255) NOT NULL,
   type event_types NOT NULL,
   country character(2) NOT NULL,
   asn smallint NOT NULL,
@@ -70,6 +70,8 @@ CREATE TABLE event_start
   resolution_size character varying(32) NOT NULL DEFAULT ''::character varying,
   flash_version character varying(32) NOT NULL DEFAULT ''::character varying,
   html5_video boolean NOT NULL DEFAULT false,
+  relative_url character varying(255) NOT NULL,
+  protocol uri_scheme NOT NULL DEFAULT 'https'::uri_scheme,
   CONSTRAINT event_start_pkey PRIMARY KEY (id)
 )
 WITH (

@@ -137,9 +137,7 @@ module.exports.insertRandomData = function insertRandomData(req, res) {
       event = new Event({
         user_id: userId,
         ip: user_ips[userIndex],
-        protocol: user_protocols[userIndex],
         fqdn: user_fqdn[userIndex],
-        relative_url: user_urls[userIndex],
         type: 'bandwidthIncrease',
         country: user_countries[userIndex],
         asn: user_asns[userIndex]
@@ -166,9 +164,7 @@ module.exports.insertRandomData = function insertRandomData(req, res) {
       event = new Event({
         user_id: userId,
         ip: user_ips[userIndex],
-        protocol: user_protocols[userIndex],
         fqdn: user_fqdn[userIndex],
-        relative_url: user_urls[userIndex],
         type: 'bandwidthDecrease',
         country: user_countries[userIndex],
         asn: user_asns[userIndex]
@@ -196,9 +192,7 @@ module.exports.insertRandomData = function insertRandomData(req, res) {
       event = new Event({
         user_id: userId,
         ip: user_ips[userIndex],
-        protocol: user_protocols[userIndex],
         fqdn: user_fqdn[userIndex],
-        relative_url: user_urls[userIndex],
         type: 'error',
         country: user_countries[userIndex],
         asn: user_asns[userIndex]
@@ -226,9 +220,7 @@ module.exports.insertRandomData = function insertRandomData(req, res) {
       event = new Event({
         user_id: userId,
         ip: user_ips[userIndex],
-        protocol: user_protocols[userIndex],
         fqdn: user_fqdn[userIndex],
-        relative_url: user_urls[userIndex],
         type: 'buffering',
         country: user_countries[userIndex],
         asn: user_asns[userIndex]
@@ -255,9 +247,7 @@ module.exports.insertRandomData = function insertRandomData(req, res) {
       event = new Event({
         user_id: userId,
         ip: user_ips[userIndex],
-        protocol: user_protocols[userIndex],
         fqdn: user_fqdn[userIndex],
-        relative_url: user_urls[userIndex],
         type: 'start',
         country: user_countries[userIndex],
         asn: user_asns[userIndex]
@@ -275,7 +265,9 @@ module.exports.insertRandomData = function insertRandomData(req, res) {
           user_agent: randomPick(browsers)+' user agent',
           resolution_size: randomSmallInteger()+'x'+randomSmallInteger(),
           flash_version: randomSmallInteger(),
-          html5_video: chance(50)
+          html5_video: chance(50),
+          relative_url: user_urls[userIndex],
+          protocol: user_protocols[userIndex]
         });
         additionnalEvent = eventStart;
         beforeInsert();
@@ -290,9 +282,7 @@ module.exports.insertRandomData = function insertRandomData(req, res) {
       event = new Event({
         user_id: userId,
         ip: user_ips[userIndex],
-        protocol: user_protocols[userIndex],
         fqdn: user_fqdn[userIndex],
-        relative_url: user_urls[userIndex],
         type: 'stop',
         country: user_countries[userIndex],
         asn: user_asns[userIndex]

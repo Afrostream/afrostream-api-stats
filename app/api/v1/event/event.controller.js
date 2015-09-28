@@ -11,9 +11,7 @@ var createEvent = function (req) {
   return new Event({
     user_id: req.body.user_id,
     ip: req.ip,
-    protocol: req.protocol,
     fqdn: req.body.fqdn,
-    relative_url: req.body.relative_url,
     type: req.body.type,
     // FIXME: geoip.
     country: 'FR',
@@ -47,7 +45,9 @@ var createEventStart = function (req, eventId) {
     user_agent: req.body.user_agent,
     resolution_size: req.body.resolution_size,
     flash_version: req.body.flash_version,
-    html5_video: req.body.html5_video
+    html5_video: req.body.html5_video,
+    relative_url: req.body.relative_url,
+    protocol: req.protocol
   }).save();
 };
 
