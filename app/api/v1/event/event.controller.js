@@ -62,52 +62,32 @@ var createEventStop = function (req, eventId) {
 exports.create = function (req, res) {
   var p;
 
+  p = createEvent(req)
+    .then(function (event) { req.eid = event.id; return event.id; });
   switch (req.body.type) {
     case 'bandwidthIncrease':
     case 'bandwidthDecrease':
-      p = createEvent(req).then(function (event) {
-        return createEventBandwidth(req, event.id)
-          .then(function (eventBandwidth) {
-            return { events: [ event.toJSON(), eventBandwidth.toJSON() ]}
-          });
-      });
+      p = p.then(createEventBandwidth.bind(null, req));
       break;
     case 'error':
-      p = createEvent(req).then(function (event) {
-      return createEventError(req, event.id)
-        .then(function (eventError) {
-          return { events: [ event.toJSON(), eventError.toJSON() ]}
-        });
-      });
+      p = p.then(createEventError.bind(null, req));
       break;
     case 'buffering':
-      p = createEvent(req).then(function (event) {
-        return { events: [ event.toJSON() ] };
-      });
+      // nothing
       break;
     case 'start':
-      p = createEvent(req).then(function (event) {
-        return createEventStart(req, event.id)
-          .then(function (eventStart) {
-            return { events: [ event.toJSON(), eventStart.toJSON() ]}
-          });
-      });
+      p = p.then(createEventStart.bind(null, req));
       break;
     case 'stop':
-      p = createEvent(req).then(function (event) {
-        return createEventStop(req, event.id)
-          .then(function (eventStop) {
-            return { events: [ event.toJSON(), eventStop.toJSON() ]}
-          });
-      });
+      p = p.then(createEventStop.bind(null, req));
       break;
     default:
       break;
   }
   //
   p.then(
-    function success(data) { res.send(data);  },
-    function error(err) { res.error(err); }
+    function success() { res.send({id: req.eid});  },
+    function error(err){ res.error(err); }
   );
 };
 
