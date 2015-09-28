@@ -10,12 +10,21 @@ var config = rootRequire('config');
 // express
 // third party
 var app = require('express')();
-rootRequire('/config/express.js')(app);
+var ev = require('express-validation');
+
+// setup express middlewares
+require('./middlewares.js')(app);
 
 // routes
 require('./routes.js')(app);
 
-console.log('trying to bind to '+config.port);
+// default error handler
+app.use(function (err, req, res, next) {
+  if (err instanceof ev.ValidationError) {
+    return res.error(err.errors[0].messages.join(','));
+  }
+  next();
+});
 
 // opening port
 app.listen(config.port, function() {
