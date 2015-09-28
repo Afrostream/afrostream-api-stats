@@ -7,5 +7,3 @@ require('../app');
 
 // utilzzz
 Array.prototype.randomPick = function () { return this[Math.floor(Math.random() * this.length)]; };
-Math.randomInt = function () { return Math.round(Math.random()*100000); };
-

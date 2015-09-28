@@ -4,7 +4,7 @@
   "description": "nodejs micro server",
   "main": "server.js",
   "scripts": {
-    "start": "node app/index.js",
+    "start": "node server.js",
     "dev": "node_modules/.bin/pm2-dev run index/index.js",
     "test": "mocha test/integration"
   },
@@ -24,15 +24,16 @@
     "bookshelf": "^0.8.2",
     "compression": "^1.5.2",
     "express": "^4.13.3",
+    "express-cluster": "0.0.4",
     "express-validation": "^0.4.5",
     "joi": "^6.7.1",
     "knex": "^0.8.6",
     "lodash": "^3.10.1",
     "pg": "^4.4.2",
-    "pm2": "^0.14.7",
     "toobusy-js": "^0.4.2"
   },
   "devDependencies": {
+    "faker": "^3.0.1",
     "mocha": "^2.3.3",
     "q": "^1.4.1",
     "supertest": "^1.1.0"

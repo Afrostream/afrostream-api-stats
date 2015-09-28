@@ -10,16 +10,18 @@ var app = rootRequire('/app');
 // third party
 var request = require('supertest');
 
+var faker = require('faker');
+faker.locale = "fr";
+
 // events
-var eventsType = ['bandwidthIncrease', 'bandwidthDecrease', 'error', 'buffering', 'start', 'stop'];
-
 describe('/api/v1/events', function () {
-  describe('POST event', function () {
-    var clientId = Math.randomInt()
-      , videoBitrate = Math.randomInt()
-      , audioBitrate = Math.randomInt();
+  var user_id = faker.random.number()
+    , fqdn = faker.internet.domainName()
+    , relative_url = faker.internet.url();
 
-    var eventType = eventsType.randomPick();
+  describe('POST event bandwidthIncrease', function () {
+    var video_bitrate = faker.random.number()
+      , audio_bitrate = faker.random.number();
 
     var eventId;
 
@@ -27,20 +29,17 @@ describe('/api/v1/events', function () {
       request(app)
       .post('/api/v1/events')
       .send({
-         clientId : clientId,
-         type : eventType,
-         videoBitrate : videoBitrate,
-         audioBitrate : audioBitrate
+         user_id : user_id,
+         type : 'bandwidthIncrease',
+         fqdn : fqdn,
+         relative_url: relative_url,
+         video_bitrate : video_bitrate,
+         audio_bitrate : audio_bitrate
        })
       .expect('Content-Type', /json/)
       .expect(200)
       .expect(function(res) {
         assert(typeof res.body.id !== "undefined");
-        assert(res.body.clientId === clientId);
-        assert(res.body.type === eventType);
-        assert(res.body.videoBitrate === videoBitrate);
-        assert(res.body.audioBitrate === audioBitrate);
-
         eventId = res.body.id;
       })
       .end(done);
