@@ -4,13 +4,7 @@ var knex = require('./knex.js')
   , bookshelf = require('bookshelf')(knex);
 
 var Event = bookshelf.Model.extend({
-  tableName: 'event',
-  initialize: function (attributes, options) {
-    if (options && options.req) {
-      // extracting default info from the request
-
-    }
-  }
+  tableName: 'event'
 });
 
 var EventBandwidth = bookshelf.Model.extend({
