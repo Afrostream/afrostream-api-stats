@@ -3,7 +3,7 @@
 module.exports = function (app) {
   app.use('/test', require('./test'));
   // REST
-  app.use('/api/v1/events', require('./api/v1/events/index.js'));
+  app.use('/api/v1/events', require('./api/v1/event/index.js'));
   // NON-REST (bulk send)
   app.post('/api/v1/send', require('./api/v1/send.js'));
   //
