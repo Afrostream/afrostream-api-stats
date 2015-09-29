@@ -930,6 +930,11 @@
         }
       }
     },
+    "q": {
+      "version": "1.4.1",
+      "from": "q@*",
+      "resolved": "https://registry.npmjs.org/q/-/q-1.4.1.tgz"
+    },
     "toobusy-js": {
       "version": "0.4.2",
       "from": "toobusy-js@*",
