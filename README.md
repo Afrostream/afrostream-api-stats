@@ -10,20 +10,89 @@ npm test
 
 # API
 
-## /api/v1/events
+## POST /api/v1/events
 
-REST
+### evenement bandwidthIncrease
 
 ```
+{
+  user_id : number (integer positive),
+  type : 'bandwidthIncrease',
+  fqdn : string (max 255),
+  video_bitrate : number (integer positive),
+  audio_bitrate : number (integer positive)
+}
+```
 
+### evenement bandwidthDecrease
+
+```
+{
+  user_id : number (integer positive),
+  type : 'bandwidthDecrease',
+  fqdn : string (max 255),
+  video_bitrate : number (integer positive),
+  audio_bitrate : number (integer positive)
+}
+```
+
+### evenement buffering
+
+```
+{
+  user_id : number (integer positive),
+  type : 'buffering',
+  fqdn : string (max 255)
+}
+```
+
+### evenement error
+
+```
+{
+  user_id : number (integer positive),
+  type : 'error',
+  fqdn : string (max 255),
+  number: number (small integer positive),
+  message: string (max 255)
+}
+```
+
+### evenement start
+
+```
+{
+  user_id : number (integer positive),
+  type : 'start',
+  fqdn : string (max 255),
+  os: string (max 255),
+  os_version: string (max 64),
+  web_browser: string (max 255),
+  web_browser_version: string (max 64),
+  resolution_size: string (max 32),
+  flash_version: string (max 32),
+  html5_video: boolean,
+  relative_url: string (max 255),
+}
+```
+
+### evenement stop
+
+```
+{
+  user_id : number (integer positive),
+  type : 'stop',
+  fqdn : string (max 255),
+  timeout: boolean,
+  frames_dropped: number (integer positive)
+}
 ```
 
 ## /api/v1/send
 
-NON REST (bulk send)
+FIXME
 
-
-
+bulk send
 
 # Testing
 
