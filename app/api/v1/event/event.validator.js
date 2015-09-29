@@ -26,7 +26,7 @@ var validateBodyEventBandwidthDecrease = validate({
 
 var validateBodyEventError = validate({
   body: {
-    type: Joi.string().equal('bandwidthDecrease').required(),
+    type: Joi.string().equal('error').required(),
     user_id: Joi.number().integer().positive().required(),
     fqdn: Joi.string().max(255).required(),
     number: Joi.number().integer().positive().required(),
@@ -84,10 +84,10 @@ module.exports = function (options) {
       case 'buffering':
         validateBodyEventBuffering(req, res, next);
         break;
-      case 'event_start':
+      case 'start':
         validateBodyEventStart(req, res, next);
         break;
-      case 'event_stop':
+      case 'stop':
         validateBodyEventStop(req, res, next);
         break;
       default:

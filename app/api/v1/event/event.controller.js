@@ -3,7 +3,7 @@
 var models = rootRequire('models.js');
 var Event = models.Event
   , EventBandwidth = models.EventBandwidth
-  , EventError = models.Error
+  , EventError = models.EventError
   , EventStart = models.EventStart
   , EventStop = models.EventStop;
 
@@ -42,7 +42,7 @@ var createEventStart = function (req, eventId) {
     os_version: req.body.os_version,
     web_browser: req.body.web_browser,
     web_browser_version: req.body.web_browser_version,
-    user_agent: req.body.user_agent,
+    user_agent: String(req.headers['user-agent']),
     resolution_size: req.body.resolution_size,
     flash_version: req.body.flash_version,
     html5_video: req.body.html5_video,
