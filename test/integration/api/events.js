@@ -31,10 +31,10 @@ describe('/api/v1/events', function () {
     , ip = faker.internet.ip();
 
   describe('POST event bandwidthIncrease', function () {
+    var eventId;
+
     var video_bitrate = faker.random.number()
       , audio_bitrate = faker.random.number();
-
-    var eventId;
 
     it('should answer 200OK', function (done) {
       request(app)
@@ -72,10 +72,10 @@ describe('/api/v1/events', function () {
   });
 
   describe('POST event bandwidthDecrease', function () {
+    var eventId;
+
     var video_bitrate = faker.random.number()
       , audio_bitrate = faker.random.number();
-
-    var eventId;
 
     it('should answer 200OK', function (done) {
       request(app)
@@ -113,9 +113,6 @@ describe('/api/v1/events', function () {
   });
 
   describe('POST event buffering', function () {
-    var video_bitrate = faker.random.number()
-      , audio_bitrate = faker.random.number();
-
     var eventId;
 
     it('should answer 200OK', function (done) {
@@ -148,9 +145,6 @@ describe('/api/v1/events', function () {
   });
 
   describe('POST event error', function () {
-    var video_bitrate = faker.random.number()
-      , audio_bitrate = faker.random.number();
-
     var eventId;
 
     var message = faker.lorem.sentence();
@@ -192,9 +186,6 @@ describe('/api/v1/events', function () {
   });
 
   describe('POST event start', function () {
-    var video_bitrate = faker.random.number()
-      , audio_bitrate = faker.random.number();
-
     var eventId;
 
     var os = 'linux';
@@ -254,9 +245,6 @@ describe('/api/v1/events', function () {
   });
 
   describe('POST event stop', function () {
-    var video_bitrate = faker.random.number()
-      , audio_bitrate = faker.random.number();
-
     var eventId;
 
     var timeout = true;

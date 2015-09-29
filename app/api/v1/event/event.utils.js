@@ -79,10 +79,6 @@ var createEventStop = function (data, eventId) {
   }).save();
 };
 
-var getIp = function (req) {
-  return req.body.ip || req.ip;
-};
-
 var getUserAgent = function (req) {
   return req.headers['user-agent'] ? String(req.headers['user-agent']) : '';
 };
@@ -92,5 +88,4 @@ module.exports.createEventBandwidth = createEventBandwidth;
 module.exports.createEventError = createEventError;
 module.exports.createEventStart = createEventStart;
 module.exports.createEventStop = createEventStop;
-module.exports.getIp = getIp;
 module.exports.getUserAgent = getUserAgent;

@@ -3,10 +3,15 @@
 var utils = require('./event.utils.js');
 
 exports.create = function (req, res) {
-  var p;
+  var data = {
+    body: req.body,
+    ip: req.body.ip || req.ip,
+    userAgent: utils.getUserAgent(req),
+    protocol: req.protocol
+  };
 
   // creating event row in database & saving id in req.eid
-  p = utils.createEvent({body: req.body, ip: utils.getIp(req)})
+  var p = utils.createEvent(data)
     .then(function (event) {
       req.eid = event.id;
       return event.id;
@@ -15,19 +20,19 @@ exports.create = function (req, res) {
   switch (req.body.type) {
     case 'bandwidthIncrease':
     case 'bandwidthDecrease':
-      p = p.then(utils.createEventBandwidth.bind(null, {body: req.body}));
+      p = p.then(utils.createEventBandwidth.bind(null, data));
       break;
     case 'error':
-      p = p.then(utils.createEventError.bind(null, {body: req.body}));
+      p = p.then(utils.createEventError.bind(null, data));
       break;
     case 'buffering':
       // nothing
       break;
     case 'start':
-      p = p.then(utils.createEventStart.bind(null, {body: req.body, userAgent: utils.getUserAgent(req), protocol: req.protocol}));
+      p = p.then(utils.createEventStart.bind(null, data));
       break;
     case 'stop':
-      p = p.then(utils.createEventStop.bind(null, {body: req.body}));
+      p = p.then(utils.createEventStop.bind(null, data));
       break;
     default:
       break;
