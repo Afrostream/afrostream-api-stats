@@ -19,8 +19,8 @@ npm test
   "user_id" : number (integer positive),
   "type" : 'bandwidthIncrease',
   "fqdn" : string (max 255),
-  "video_bitrate" : number (integer positive),
-  "audio_bitrate" : number (integer positive)
+  "video_bitrate" : number (integer),
+  "audio_bitrate" : number (integer)
 }
 ```
 
@@ -31,8 +31,8 @@ npm test
   "user_id" : number (integer positive),
   "type" : 'bandwidthDecrease',
   "fqdn" : string (max 255),
-  "video_bitrate" : number (integer positive),
-  "audio_bitrate" : number (integer positive)
+  "video_bitrate" : number (integer),
+  "audio_bitrate" : number (integer)
 }
 ```
 
@@ -53,7 +53,7 @@ npm test
   "user_id" : number (integer positive),
   "type" : 'error',
   "fqdn" : string (max 255),
-  "number": number (small integer positive),
+  "number": number (small integer),
   "message": string (max 255)
 }
 ```
@@ -84,7 +84,7 @@ npm test
   "type" : 'stop',
   "fqdn" : string (max 255),
   "timeout": boolean,
-  "frames_dropped": number (integer positive)
+  "frames_dropped": number (integer)
 }
 ```
 
@@ -122,8 +122,8 @@ example
       "user_id" : number (integer positive),
       "type" : 'bandwidthIncrease',
       "fqdn" : string (max 255),
-      "video_bitrate" : number (integer positive),
-      "audio_bitrate" : number (integer positive)
+      "video_bitrate" : number (integer),
+      "audio_bitrate" : number (integer)
     },
     {
       "user_id" : number (integer positive),

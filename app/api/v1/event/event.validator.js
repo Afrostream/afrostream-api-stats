@@ -8,8 +8,8 @@ var EventBandwidthIncrease = {
   user_id: Joi.number().integer().positive().required(),
   ip: Joi.string().ip().optional(),
   fqdn: Joi.string().max(255).required(),
-  video_bitrate: Joi.number().integer().positive().required(),
-  audio_bitrate: Joi.number().integer().positive().required()
+  video_bitrate: Joi.number().integer().required(),
+  audio_bitrate: Joi.number().integer().required()
 };
 
 var EventBandwidthDecrease = {
@@ -17,8 +17,8 @@ var EventBandwidthDecrease = {
   user_id: Joi.number().integer().positive().required(),
   ip: Joi.string().ip().optional(),
   fqdn: Joi.string().max(255).required(),
-  video_bitrate: Joi.number().integer().positive().required(),
-  audio_bitrate: Joi.number().integer().positive().required()
+  video_bitrate: Joi.number().integer().required(),
+  audio_bitrate: Joi.number().integer().required()
 };
 
 var EventError = {
@@ -26,7 +26,7 @@ var EventError = {
   user_id: Joi.number().integer().positive().required(),
   ip: Joi.string().ip().optional(),
   fqdn: Joi.string().max(255).required(),
-  number: Joi.number().integer().positive().required(),
+  number: Joi.number().integer().required(),
   message: Joi.string().max(255).required()
 };
 
@@ -58,7 +58,7 @@ var EventStop = {
   ip: Joi.string().ip().optional(),
   fqdn: Joi.string().max(255).required(),
   timeout: Joi.boolean().required(),
-  frames_dropped: Joi.number().integer().positive().required()
+  frames_dropped: Joi.number().integer().required()
 };
 
 var validateBodyEventBandwidthIncrease = validate({body: EventBandwidthIncrease});
