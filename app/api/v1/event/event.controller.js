@@ -5,7 +5,7 @@ var utils = require('./event.utils.js');
 exports.create = function (req, res) {
   var data = {
     body: req.body,
-    ip: req.body.ip || req.ip,
+    ip: req.body.ip || req.herokuclientip,
     userAgent: utils.getUserAgent(req),
     protocol: req.protocol
   };
