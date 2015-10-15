@@ -16,6 +16,7 @@ module.exports = function (app) {
   // req.error error handler
   app.use(rootRequire('/lib/middleware-error')());
   app.use(rootRequire('/lib/middleware-catchall')());
+  app.use(rootRequire('/lib/middleware-herokuclientip')());
 
   // parsing POST data
   app.use(compression());
