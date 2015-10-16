@@ -9,19 +9,37 @@ var Event = models.Event
 
 var assert = require('better-assert');
 
+var maxmind = require('maxmind');
+
+var getMaxmindInfo = function (ip) {
+  var asn, country, m;
+  try {
+    m = String(maxmind.getAsn(ip)).match(/AS([0-9]+).*/);
+    asn = m ? m[1] : '';
+    country = maxmind.getCountry(ip);
+  } catch (e) {
+    console.error('maxmind error ', e);
+  }
+  return  {
+    asn: asn ? asn : '',
+    countryCode : (country && country.code) ? country.code : ''
+  };
+};
+
 var createEvent = function (data) {
   assert(data);
   assert(data.body);
   assert(data.ip);
+
+  var maxmindInfo = getMaxmindInfo(data.ip);
 
   return new Event({
     user_id: data.body.user_id,
     ip: data.ip,
     fqdn: data.body.fqdn,
     type: data.body.type,
-    // FIXME: geoip.
-    country: 'FR',
-    asn: 42
+    country: maxmindInfo.countryCode,
+    asn: maxmindInfo.asn
   }).save();
 };
 

@@ -7,6 +7,13 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 // load conf
 var config = rootRequire('config');
 
+// load geoip
+var maxmind = require('maxmind');
+maxmind.init(__dirname + '/../data/geoip/GeoIP.dat');
+maxmind.init(__dirname + '/../data/geoip/GeoIPv6.dat');
+maxmind.init(__dirname + '/../data/geoip/GeoIPASNum.dat');
+maxmind.init(__dirname + '/../data/geoip/GeoIPASNumv6.dat');
+
 // express
 // third party
 var app = require('express')();
