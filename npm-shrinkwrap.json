@@ -840,6 +840,11 @@
       "from": "lodash@*",
       "resolved": "https://registry.npmjs.org/lodash/-/lodash-3.10.1.tgz"
     },
+    "maxmind": {
+      "version": "0.6.0",
+      "from": "maxmind@*",
+      "resolved": "https://registry.npmjs.org/maxmind/-/maxmind-0.6.0.tgz"
+    },
     "pg": {
       "version": "4.4.2",
       "from": "pg@*",
