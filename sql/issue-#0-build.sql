@@ -66,7 +66,7 @@ CREATE TABLE event_start
   os_version character varying(64) NOT NULL DEFAULT ''::character varying,
   web_browser character varying(256) NOT NULL DEFAULT ''::character varying,
   web_browser_version character varying(64) NOT NULL DEFAULT ''::character varying,
-  user_agent character varying(128) NOT NULL DEFAULT ''::character varying,
+  user_agent character varying(255) NOT NULL DEFAULT ''::character varying,
   resolution_size character varying(32) NOT NULL DEFAULT ''::character varying,
   flash_version character varying(32) NOT NULL DEFAULT ''::character varying,
   html5_video boolean NOT NULL DEFAULT false,
