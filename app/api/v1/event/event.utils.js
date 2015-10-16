@@ -15,13 +15,13 @@ var getMaxmindInfo = function (ip) {
   var asn, country, m;
   try {
     m = String(maxmind.getAsn(ip)).match(/AS([0-9]+).*/);
-    asn = m ? m[1] : '';
+    asn = m ? parseInt(m[1]) : '';
     country = maxmind.getCountry(ip);
   } catch (e) {
     console.error('maxmind error ', e);
   }
   return  {
-    asn: asn ? asn : '',
+    asn: asn ? asn : 0,
     countryCode : (country && country.code) ? country.code : ''
   };
 };
