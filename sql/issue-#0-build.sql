@@ -26,7 +26,7 @@ CREATE TABLE event
   fqdn character varying(255) NOT NULL,
   type event_types NOT NULL,
   country character(2) NOT NULL,
-  asn smallint NOT NULL,
+  asn integer NOT NULL,
   date timestamp with time zone NOT NULL DEFAULT now(),
   CONSTRAINT event_pkey PRIMARY KEY (id)
 )
