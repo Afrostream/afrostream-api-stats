@@ -6,5 +6,6 @@ module.exports = {
     debug: true,
     client: 'pg',
     connection: 'postgres://postgres:root@localhost:5432/cdnselector'
-  }
+  },
+  fwdToMq: false
 };

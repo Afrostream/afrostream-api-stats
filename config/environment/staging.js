@@ -9,5 +9,6 @@ module.exports = {
       min: 1,
       max: 2
     }
-  }
+  },
+  fwdToMq: true
 };
