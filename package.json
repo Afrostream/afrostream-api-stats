@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/Afrostream/afrostream-api-stats#readme",
   "dependencies": {
+    "amqplib": "^0.4.0",
     "better-assert": "^1.0.2",
     "body-parser": "^1.14.0",
     "bookshelf": "^0.8.2",
