@@ -284,4 +284,25 @@ describe('/api/v1/events', function () {
       }).then(done);
     });
   });
+
+  describe('POST event ping', function () {
+    it('should answer 200OK', function (done) {
+      request(app)
+        .post('/api/v1/events')
+        .send({
+          user_id : user_id,
+          type : 'ping',
+          fqdn : fqdn,
+          ip: ip
+        })
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .expect(function(res) {
+          console.log(res.body);
+          assert(typeof res.body.id !== "undefined");
+          assert(res.body.id === null);
+        })
+        .end(done);
+    });
+  });
 });

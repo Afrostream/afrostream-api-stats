@@ -88,6 +88,16 @@ npm test
 }
 ```
 
+### event ping
+
+```
+{
+  "user_id" : number (integer positive),
+  "type" : 'ping',
+  "fqdn" : string (max 255)
+}
+```
+
 ## POST /api/v1/send
 
 bulk send (non rest)

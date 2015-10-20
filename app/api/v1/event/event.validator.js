@@ -61,12 +61,20 @@ var EventStop = {
   frames_dropped: Joi.number().integer().required()
 };
 
+var EventPing = {
+  type: Joi.string().equal('ping').required(),
+  user_id: Joi.number().integer().positive().required(),
+  ip: Joi.string().ip().optional(),
+  fqdn: Joi.string().max(255).required()
+};
+
 var validateBodyEventBandwidthIncrease = validate({body: EventBandwidthIncrease});
 var validateBodyEventBandwidthDecrease = validate({body: EventBandwidthDecrease});
 var validateBodyEventError = validate({body:EventError});
 var validateBodyEventBuffering = validate({body:EventBuffering});
 var validateBodyEventStart = validate({body:EventStart});
 var validateBodyEventStop = validate({body:EventStop});
+var validateBodyEventPing = validate({body:EventPing});
 
 module.exports.middleware = function (options) {
   return function (req, res, next) {
@@ -89,6 +97,9 @@ module.exports.middleware = function (options) {
       case 'stop':
         validateBodyEventStop(req, res, next);
         break;
+      case 'ping':
+        validateBodyEventPing(req, res, next);
+        break;
       default:
         return res.error('unknown type');
     }
@@ -101,3 +112,4 @@ module.exports.EventError = EventError;
 module.exports.EventBuffering = EventBuffering;
 module.exports.EventStart = EventStart;
 module.exports.EventStop = EventStop;
+module.exports.EventPing = EventPing;

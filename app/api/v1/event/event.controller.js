@@ -10,12 +10,28 @@ exports.create = function (req, res) {
     protocol: req.protocol
   };
 
-  // creating event row in database & saving id in req.eid
-  var p = utils.createEvent(data)
-    .then(function (event) {
-      req.eid = event.id;
-      return event.id;
-    });
+  var p;
+
+  switch (req.body.type) {
+    case 'bandwidthIncrease':
+    case 'bandwidthDecrease':
+    case 'error':
+    case 'buffering':
+    case 'start':
+    case 'stop':
+      // creating event row in database & saving id in req.eid
+      p = utils.createEvent(data)
+        .then(function (event) {
+          req.eid = event.id;
+          return event.id;
+        });
+      break;
+    case 'ping':
+      return res.send({id: null});
+      break;
+    default:
+      break
+  }
   // creating linked event
   switch (req.body.type) {
     case 'bandwidthIncrease':
