@@ -298,7 +298,6 @@ describe('/api/v1/events', function () {
         .expect('Content-Type', /json/)
         .expect(200)
         .expect(function(res) {
-          console.log(res.body);
           assert(typeof res.body.id !== "undefined");
           assert(res.body.id === null);
         })

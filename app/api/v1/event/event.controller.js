@@ -1,6 +1,9 @@
 'use strict';
 
 var utils = require('./event.utils.js');
+var mq = rootRequire('mq.js');
+
+var config = rootRequire('config');
 
 exports.create = function (req, res) {
   var data = {
@@ -10,6 +13,20 @@ exports.create = function (req, res) {
     protocol: req.protocol
   };
 
+  // forwarding to mq.
+  var maxmindInfo;
+  if (config.mq) {
+    maxmindInfo = utils.getMaxmindInfo(data.ip);
+    var message = JSON.parse(JSON.stringify(req.body));
+    message.ip = data.ip;
+    message.userAgent = data.userAgent;
+    message.protocol = data.protocol;
+    message.country = maxmindInfo.countryCode;
+    message.asn = maxmindInfo.asn;
+    mq.send(message);
+  }
+
+  // creating events in database
   var p;
 
   switch (req.body.type) {
@@ -20,7 +37,7 @@ exports.create = function (req, res) {
     case 'start':
     case 'stop':
       // creating event row in database & saving id in req.eid
-      p = utils.createEvent(data)
+      p = utils.createEvent(data, maxmindInfo)
         .then(function (event) {
           req.eid = event.id;
           return event.id;

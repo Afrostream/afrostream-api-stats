@@ -25,6 +25,11 @@ require('./middlewares.js')(app);
 // routes
 require('./routes.js')(app);
 
+// connecting to mq
+if (config.mq) {
+  rootRequire('mq.js').connect(config.mq.endpoint);
+}
+
 // default error handler
 app.use(function (err, req, res, next) {
   if (err instanceof ev.ValidationError) {

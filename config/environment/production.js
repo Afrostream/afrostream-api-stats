@@ -12,5 +12,5 @@ module.exports = {
       max: 2
     }
   },
-  fwdToMq: true
+  mq: { endpoint: 'amqp://rabbitmq-1.adm.afrostream.net' }
 };

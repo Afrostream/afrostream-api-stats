@@ -26,12 +26,12 @@ var getMaxmindInfo = function (ip) {
   };
 };
 
-var createEvent = function (data) {
+var createEvent = function (data, maxmindInfo) {
   assert(data);
   assert(data.body);
   assert(data.ip);
 
-  var maxmindInfo = getMaxmindInfo(data.ip);
+  maxmindInfo = maxmindInfo || getMaxmindInfo(data.ip);
 
   return new Event({
     user_id: data.body.user_id,
@@ -107,3 +107,4 @@ module.exports.createEventError = createEventError;
 module.exports.createEventStart = createEventStart;
 module.exports.createEventStop = createEventStop;
 module.exports.getUserAgent = getUserAgent;
+module.exports.getMaxmindInfo = getMaxmindInfo;

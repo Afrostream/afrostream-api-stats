@@ -1,5 +1,14 @@
 'use strict';
 
+/**
+ * FIXME:
+ *   refacto this using a mq object, and exporting it
+ *   with methods : connect() and send()
+ *   send() should trigger connect() if not connected
+ *   all methods should return promises.
+ *
+ * @type {exports|module.exports}
+ */
 var amqp = require('amqplib/callback_api');
 
 var exchangeName = 'afrostream-api-stats';
@@ -16,8 +25,8 @@ var retry = function () {
   }
 };
 
-var connect = function () {
-  amqp.connect('amqp://rabbitmq-1.adm.afrostream.net', function(err, conn) {
+var connect = function (endPoint) {
+  amqp.connect(endPoint, function(err, conn) {
     if (err) {
       console.error('middleware mq: cannot connect to mq ', err);
       retry();
@@ -31,35 +40,25 @@ var connect = function () {
       conn.createChannel(function (err, ch) {
         // exporting channel.
         connect.ch = ch;
-        //
-        var event = {
-          "user_id": 4242,
-          "type": 'bandwidthIncrease',
-          "fqdn": 'cdn1.afrostream.tv',
-          "video_bitrate": 42000,
-          "audio_bitrate": 1000
-        };
       });
     }
   });
 };
 
-module.exports = function (options) {
-  connect();
-
-  return function (req, res, next) {
-    try {
-      if (req.body) {
-        // rabbit-mq forward.
-        if (connect.ch) {
-          connect.ch.assertExchange(exchangeName, 'fanout', {durable: true});
-          connect.ch.publish(exchangeName, '', new Buffer(JSON.stringify(req.body)));
-        }
-      }
-    } catch (e) {
-      console.error('middleware mq: Exception fwd to mq : ', e);
-      retry();
+var send = function (data) {
+  try {
+    if (connect.ch) {
+      connect.ch.assertExchange(exchangeName, 'fanout', {durable: true});
+      connect.ch.publish(exchangeName, '', new Buffer(JSON.stringify(data)));
     }
-    next();
-  };
+  } catch (e) {
+    console.error('middleware mq: Exception fwd to mq : ', e);
+    retry();
+  }
 };
+
+/*
+ * exporting connect & send
+ */
+module.exports.connect = connect;
+module.exports.send = send;
