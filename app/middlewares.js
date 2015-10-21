@@ -11,7 +11,9 @@ var config = rootRequire('/config');
  */
 module.exports = function (app) {
   // first middleware : are we overloaded ?
-  app.use(rootRequire('/lib/middleware-toobusy')());
+  if (process.env.NODE_ENV !== 'test') {
+    app.use(rootRequire('/lib/middleware-toobusy')());
+  }
 
   // req.error error handler
   app.use(rootRequire('/lib/middleware-error')());
