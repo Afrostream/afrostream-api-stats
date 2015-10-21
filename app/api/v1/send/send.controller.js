@@ -29,9 +29,13 @@ exports.create = function (req, res) {
       if (config.mq) {
         maxmindInfo = utils.getMaxmindInfo(data.ip);
         var message = JSON.parse(JSON.stringify(req.body));
-        message.ip = data.ip;
-        message.country = maxmindInfo.countryCode;
-        message.asn = maxmindInfo.asn;
+        if (event.type) {
+          message.ip = data.ip;
+          message.userAgent = data.userAgent;
+          message.protocol = data.protocol;
+          message.country = maxmindInfo.countryCode;
+          message.asn = maxmindInfo.asn;
+        }
         mq.send(message);
       }
 
