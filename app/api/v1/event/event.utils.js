@@ -60,7 +60,7 @@ var createEventError = function (data, eventId) {
 
   return new EventError({
     event_id: eventId,
-    number: data.body.number,
+    number: data.body.number || 0,
     message: data.body.message
   }).save();
 };

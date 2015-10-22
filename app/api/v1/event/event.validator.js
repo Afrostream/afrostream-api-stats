@@ -26,7 +26,7 @@ var EventError = {
   user_id: Joi.number().integer().positive().required(),
   ip: Joi.string().ip().optional(),
   fqdn: Joi.string().max(255).required(),
-  number: Joi.number().integer().required(),
+  number: Joi.number().integer(),
   message: Joi.string().max(255).required()
 };
 
