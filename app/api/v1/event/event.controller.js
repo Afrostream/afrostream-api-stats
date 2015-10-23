@@ -1,81 +1,37 @@
 'use strict';
 
-var utils = require('./event.utils.js');
-var mq = rootRequire('mq.js');
-
 var config = rootRequire('config');
 
+var utils = require('./event.utils.js');
+
+var mq = require('./event.mq.js')
+  , session = require('./event.user-session.js')
+  , database = require('./event.database.js');
+
 exports.create = function (req, res) {
+  var ip = req.body.ip || req.herokuclientip;
+
   var data = {
+    eventType: req.body.type,
     body: req.body,
-    ip: req.body.ip || req.herokuclientip,
+    ip: ip,
+    maxmindInfos: utils.getMaxmindInfos(ip),
     userAgent: utils.getUserAgent(req),
     protocol: req.protocol
   };
 
-  // forwarding to mq.
-  var maxmindInfo;
+  // forwarding to message queue.
   if (config.mq) {
-    maxmindInfo = utils.getMaxmindInfo(data.ip);
-    var message = JSON.parse(JSON.stringify(req.body));
-    if (req.body.type === 'start') {
-      message.ip = data.ip;
-      message.userAgent = data.userAgent;
-      message.protocol = data.protocol;
-      message.country = maxmindInfo.countryCode;
-      message.asn = maxmindInfo.asn;
-    } else {
-      delete message.fqdn;
-    }
-    mq.send(message);
+    mq.forward(data);
   }
 
-  var p;
+  // updating client session
+  session.touch(data);
 
-  switch (req.body.type) {
-    case 'bandwidthIncrease':
-    case 'bandwidthDecrease':
-    case 'error':
-    case 'buffering':
-    case 'start':
-    case 'stop':
-      // creating event row in database & saving id in req.eid
-      p = utils.createEvent(data, maxmindInfo)
-        .then(function (event) {
-          req.eid = event.id;
-          return event.id;
-        });
-      break;
-    case 'ping':
-      return res.send({id: null});
-      break;
-    default:
-      break
-  }
-  // creating linked event
-  switch (req.body.type) {
-    case 'bandwidthIncrease':
-    case 'bandwidthDecrease':
-      p = p.then(utils.createEventBandwidth.bind(null, data));
-      break;
-    case 'error':
-      p = p.then(utils.createEventError.bind(null, data));
-      break;
-    case 'buffering':
-      // nothing
-      break;
-    case 'start':
-      p = p.then(utils.createEventStart.bind(null, data));
-      break;
-    case 'stop':
-      p = p.then(utils.createEventStop.bind(null, data));
-      break;
-    default:
-      break;
-  }
-  //
-  p.then(
-    function success() { res.send({id: req.eid});  },
+  // insert event in the database
+  database.insert(data)
+    .then(
+    function success(eventId) { res.send({id: eventId});  },
     function error(err){ res.error(err); }
   );
 };

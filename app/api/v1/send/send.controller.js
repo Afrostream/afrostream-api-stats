@@ -7,7 +7,10 @@ var config = rootRequire('config');
 var Q = require('q');
 
 var utils = require('../event/event.utils.js');
-var mq = rootRequire('mq.js');
+
+var mq = require('../event/event.mq.js')
+  , session = require('../event/event.user-session.js')
+  , database = require('../event/event.database.js');
 
 exports.create = function (req, res) {
   assert(req.body && Array.isArray(req.body.events));
@@ -17,85 +20,31 @@ exports.create = function (req, res) {
 
   var promises = req.body.events
     .map(function (event) {
+      var ip = event.ip || req.herokuclientip;
+
       var data = {
+        eventType: event.type,
         body: event,
-        ip: event.ip || req.herokuclientip,
+        ip: ip,
+        maxmindInfos: utils.getMaxmindInfos(ip),
         userAgent: userAgent,
         protocol: protocol
       };
 
-      // forwarding to mq.
-      var maxmindInfo;
+      // forwarding to message queue.
       if (config.mq) {
-        maxmindInfo = utils.getMaxmindInfo(data.ip);
-        var message = JSON.parse(JSON.stringify(req.body));
-        if (event.type) {
-          message.ip = data.ip;
-          message.userAgent = data.userAgent;
-          message.protocol = data.protocol;
-          message.country = maxmindInfo.countryCode;
-          message.asn = maxmindInfo.asn;
-        } else {
-          delete message.fqdn;
-        }
-        mq.send(message);
+        mq.forward(data);
       }
 
-      var eventId;
+      // updating client session
+      session.touch(data);
 
-      var p;
-
-      switch (event.type) {
-        case 'bandwidthIncrease':
-        case 'bandwidthDecrease':
-        case 'error':
-        case 'buffering':
-        case 'start':
-        case 'stop':
-          // creating event row in database & saving id in req.eid
-          p = utils.createEvent(data, maxmindInfo)
-            .then(function (event) {
-              eventId = event.id;
-              return eventId;
-            });
-          break;
-        case 'ping':
-          return null; // skip db creation
-          break;
-        default:
-          break
-      }
-      // creating linked event
-      switch (event.type) {
-        case 'bandwidthIncrease':
-        case 'bandwidthDecrease':
-          p = p.then(utils.createEventBandwidth.bind(null, data));
-          break;
-        case 'error':
-          p = p.then(utils.createEventError.bind(null, data));
-          break;
-        case 'buffering':
-          // nothing
-          break;
-        case 'start':
-          p = p.then(utils.createEventStart.bind(null, data));
-          break;
-        case 'stop':
-          p = p.then(utils.createEventStop.bind(null, data));
-          break;
-        default:
-          break;
-      }
-
-      // resolving eventId
-      return p.then(function () { return eventId; });
-    })
-    .filter(function (promise) {
-      return promise !== null;
+      // insert event in the database
+      return database.insert(data);
     });
 
   Q.all(promises).then(
-    function success(result) { res.send({events: result.map(function (id) { return { id: id }})});  },
+    function success(result) { res.send({events: result.map(function (eventId) { return { id: eventId }})});  },
     function error(err){ res.error(err); }
   );
 };

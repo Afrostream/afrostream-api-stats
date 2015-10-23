@@ -39,6 +39,7 @@
   "devDependencies": {
     "faker": "^3.0.1",
     "mocha": "^2.3.3",
+    "mockery": "^1.4.0",
     "nodemon": "^1.7.1",
     "supertest": "^1.1.0"
   },

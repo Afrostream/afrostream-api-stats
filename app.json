@@ -4,7 +4,8 @@
   "scripts":{},
   "env":{
     "NODE_ENV": "staging",
-    "DATABASE_URL": "fixme"
+    "DATABASE_URL": "postgres://ypwakrhinzcqqy:Yfs8jVbWEVuEY4tNP1gXNcOfYU@ec2-54-217-240-205.eu-west-1.compute.amazonaws.com:5432/dejpn1uol3fp4p",
+    "REDIS_URL": "redis://h:p7u79n3fid5mnh551k5kbmbs94r@ec2-54-195-242-227.eu-west-1.compute.amazonaws.com:13809"
   },
   "addons":[]
 }

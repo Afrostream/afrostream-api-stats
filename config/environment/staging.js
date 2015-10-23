@@ -10,5 +10,6 @@ module.exports = {
       max: 2
     }
   },
-  mq: { endpoint: 'amqp://rabbitmq-1.adm.afrostream.net' }
+  mq: { endpoint: 'amqp://rabbitmq-1.adm.afrostream.net' },
+  redisUrl: process.env.REDIS_URL
 };
