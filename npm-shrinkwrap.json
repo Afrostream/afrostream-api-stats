@@ -989,6 +989,18 @@
       "from": "q@*",
       "resolved": "https://registry.npmjs.org/q/-/q-1.4.1.tgz"
     },
+    "redis": {
+      "version": "2.2.5",
+      "from": "redis@*",
+      "resolved": "https://registry.npmjs.org/redis/-/redis-2.2.5.tgz",
+      "dependencies": {
+        "double-ended-queue": {
+          "version": "2.1.0-0",
+          "from": "double-ended-queue@>=2.1.0-0 <3.0.0",
+          "resolved": "https://registry.npmjs.org/double-ended-queue/-/double-ended-queue-2.1.0-0.tgz"
+        }
+      }
+    },
     "toobusy-js": {
       "version": "0.4.2",
       "from": "toobusy-js@*",
