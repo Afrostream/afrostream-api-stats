@@ -185,7 +185,7 @@ describe('/api/v1/events', function () {
     });
   });
 
-  describe('POST event start', function () {
+  describe('POST event start without bitrate', function () {
     var eventId;
 
     var os = 'linux';
@@ -244,6 +244,70 @@ describe('/api/v1/events', function () {
     });
   });
 
+  describe('POST event start with bitrate', function () {
+    var eventId;
+
+    var os = 'linux';
+    var os_version = String(faker.random.number());
+    var web_browser = 'chrome';
+    var web_browser_version = String(faker.random.number());
+    var resolution_size = faker.random.number()+"x"+faker.random.number();
+    var flash_version = String(faker.random.number());
+    var html5_video = true;
+    var relative_url = faker.lorem.sentence();
+    var video_bitrate = faker.random.number()
+      , audio_bitrate = faker.random.number();
+
+    it('should answer 200OK', function (done) {
+      request(app)
+        .post('/api/v1/events')
+        .send({
+          user_id : user_id,
+          type : 'start',
+          fqdn : fqdn,
+          ip: ip,
+          os : os,
+          os_version : os_version,
+          web_browser : web_browser,
+          web_browser_version : web_browser_version,
+          resolution_size : resolution_size,
+          flash_version : flash_version,
+          html5_video : html5_video,
+          relative_url : relative_url,
+          video_bitrate: video_bitrate,
+          audio_bitrate: audio_bitrate
+        })
+        .expect('Content-Type', /json/)
+        .expect(200)
+        .expect(function(res) {
+          assert(typeof res.body.id !== "undefined");
+          eventId = res.body.id;
+        })
+        .end(done);
+    });
+
+    it('should be readable', function (done) {
+      new Event({id: eventId}).fetch().then(function (e) {
+        assert(e.get('id') === eventId);
+        assert(e.get('user_id') === user_id);
+        assert(e.get('ip').indexOf(ip) !== -1); // ip could be transformed
+        assert(e.get('type') === 'start');
+        assert(e.get('fqdn') === fqdn);
+        return new EventStart({event_id: eventId}).fetch().then(function (e) {
+          assert(e.get('os') === os);
+          assert(e.get('os_version') === os_version);
+          assert(e.get('web_browser') === web_browser);
+          assert(e.get('web_browser_version') === web_browser_version);
+          assert(e.get('resolution_size') === resolution_size);
+          assert(e.get('flash_version') === flash_version);
+          assert(e.get('html5_video') === html5_video);
+          assert(e.get('relative_url') === relative_url);
+          assert(e.get('audio_bitrate') === audio_bitrate);
+          assert(e.get('video_bitrate') === video_bitrate);
+        });
+      }).then(done);
+    });
+  });
   describe('POST event stop', function () {
     var eventId;
 

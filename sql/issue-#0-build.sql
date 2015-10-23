@@ -72,6 +72,8 @@ CREATE TABLE event_start
   html5_video boolean NOT NULL DEFAULT false,
   relative_url character varying(255) NOT NULL,
   protocol uri_scheme NOT NULL DEFAULT 'https'::uri_scheme,
+  video_bitrate integer NOT NULL default 0,
+  audio_bitrate integer NOT NULL default 0,
   CONSTRAINT event_start_pkey PRIMARY KEY (id)
 )
 WITH (

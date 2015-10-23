@@ -82,7 +82,9 @@ var createEventStart = function (data, eventId) {
     flash_version: data.body.flash_version,
     html5_video: data.body.html5_video,
     relative_url: data.body.relative_url,
-    protocol: data.protocol
+    protocol: data.protocol,
+    video_bitrate: data.body.video_bitrate || 0,
+    audio_bitrate: data.body.audio_bitrate || 0
   }).save();
 };
 

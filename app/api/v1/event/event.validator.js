@@ -49,7 +49,9 @@ var EventStart = {
   resolution_size: Joi.string().max(32).required(),
   flash_version: Joi.string().max(32).required(),
   html5_video: Joi.boolean().required(),
-  relative_url: Joi.string().max(255).required()
+  relative_url: Joi.string().max(255).required(),
+  video_bitrate: Joi.number().integer(),
+  audio_bitrate: Joi.number().integer()
 };
 
 var EventStop = {
