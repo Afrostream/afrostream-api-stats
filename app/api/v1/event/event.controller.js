@@ -24,6 +24,8 @@ exports.create = function (req, res) {
       message.protocol = data.protocol;
       message.country = maxmindInfo.countryCode;
       message.asn = maxmindInfo.asn;
+    } else {
+      delete message.fqdn;
     }
     mq.send(message);
   }
