@@ -9,7 +9,7 @@ var Q = require('q');
 var utils = require('../event/event.utils.js');
 
 var mq = require('../event/event.mq.js')
-  , session = require('../event/event.user-session.js')
+  , session = require('../../../../sessions.js')
   , database = require('../event/event.database.js');
 
 exports.create = function (req, res) {
@@ -37,7 +37,9 @@ exports.create = function (req, res) {
       }
 
       // updating client session
-      session.touch(data);
+      if (data.eventType !== 'stop') {
+        session.touch(data);
+      }
 
       // insert event in the database
       return database.insert(data);

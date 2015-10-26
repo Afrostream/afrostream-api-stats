@@ -1,6 +1,11 @@
 'use strict';
 
 module.exports = {
+  session: {
+    dataTimeout: 5,  // seconds
+    clientTimeout: 3 // seconds
+  },
+
   allowOrigin: '*',
   knex: {
     debug: true,

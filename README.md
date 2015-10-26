@@ -163,5 +163,7 @@ node_modules/.bin/mocha test/integration/api/alive.js
 ## CURL
 
 ```
+curl -v --data '{"type":"ping","user_id":4242,"fqdn":"foo.com"}' -H "Content-Type: application/json" http://localhost:3003/api/v1/events/
 curl -v --data '{"type":"bandwidthIncrease","user_id":4242,"fqdn":"foo.com","relative_url":"/foo/bar","video_bitrate":4242,"audio_bitrate":4243}' -H "Content-Type: application/json" http://localhost:3003/api/v1/events/
+curl -v --data '{"type":"start","user_id":4242,"fqdn":"foo.com","relative_url":"/foo/bar","video_bitrate":4242,"audio_bitrate":4243,"os":"ubunion":"14.04","web_browser":"curl","web_browser_version":"1","resolution_size":"640x480","flash_version":"7","html5_video":true}' -H "Content-Type: application/json" http://localhost:3003/api/v1/events/
 ```

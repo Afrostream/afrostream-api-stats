@@ -24,6 +24,7 @@
     "body-parser": "^1.14.0",
     "bookshelf": "^0.8.2",
     "compression": "^1.5.2",
+    "connect-domain": "^0.5.0",
     "express": "^4.13.3",
     "express-cluster": "0.0.4",
     "express-validation": "^0.4.5",

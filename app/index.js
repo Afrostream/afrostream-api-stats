@@ -17,7 +17,6 @@ maxmind.init(__dirname + '/../data/geoip/GeoIPASNumv6.dat');
 // express
 // third party
 var app = require('express')();
-var ev = require('express-validation');
 
 // setup express middlewares
 require('./middlewares.js')(app);
@@ -29,14 +28,6 @@ require('./routes.js')(app);
 if (config.mq) {
   rootRequire('mq.js').connect(config.mq.endpoint);
 }
-
-// default error handler
-app.use(function (err, req, res, next) {
-  if (err instanceof ev.ValidationError) {
-    return res.error(err.errors[0].messages.join(','));
-  }
-  next();
-});
 
 // opening port
 app.listen(config.port, function() {

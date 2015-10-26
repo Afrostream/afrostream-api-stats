@@ -5,7 +5,7 @@ var config = rootRequire('config');
 var utils = require('./event.utils.js');
 
 var mq = require('./event.mq.js')
-  , session = require('./event.user-session.js')
+  , session = require('./../../../../sessions.js')
   , database = require('./event.database.js');
 
 exports.create = function (req, res) {
@@ -26,7 +26,9 @@ exports.create = function (req, res) {
   }
 
   // updating client session
-  session.touch(data);
+  if (data.eventType !== 'stop') {
+    session.touch(data);
+  }
 
   // insert event in the database
   database.insert(data)

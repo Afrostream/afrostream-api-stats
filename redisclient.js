@@ -16,4 +16,4 @@ client.on("error", function (err) {
   console.error("redis: " + err);
 });
 
-return client;
+module.exports = client;
