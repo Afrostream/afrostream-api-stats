@@ -1,8 +1,7 @@
 'use strict';
 
 var compression = require('compression')
-  , bodyParser = require('body-parser')
-  , domain = require('connect-domain');
+  , bodyParser = require('body-parser');
 
 var ev = require('express-validation');
 
@@ -19,7 +18,6 @@ module.exports = function (app) {
   }
 
   // req.error error handler
-  //app.use(domain()); // inactive, messing with setTimeout...
   app.use(rootRequire('/lib/middleware-error')());
   app.use(rootRequire('/lib/middleware-herokuclientip')());
 
