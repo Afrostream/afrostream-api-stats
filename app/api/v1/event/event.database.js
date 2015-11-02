@@ -69,8 +69,10 @@ var createEventStart = function (data, eventId) {
     html5_video: data.body.html5_video,
     relative_url: data.body.relative_url,
     protocol: data.protocol,
-    video_bitrate: data.body.video_bitrate || 0,
-    audio_bitrate: data.body.audio_bitrate || 0
+    // non mandatory for the client
+    // -2 <=> nothing received. -1 <=> client error
+    video_bitrate: data.body.video_bitrate || -2,
+    audio_bitrate: data.body.audio_bitrate || -2
   }).save();
 };
 
