@@ -27,6 +27,6 @@ knex.raw("delete from event_bandwidth where event_id in (select id as event_id f
     return knex.raw("delete from event where event.date < '" + date + "'");
   })
   .then(
-    function success() { console.log('clean database success'); },
-    function error(e) { console.error('clean database error ' + e, e); }
+    function success() { console.log('clean database success'); process.exit(); },
+    function error(e) { console.error('clean database error ' + e, e); process.exit(); }
   );
