@@ -18,6 +18,10 @@ maxmind.init(__dirname + '/../data/geoip/GeoIPASNumv6.dat');
 // third party
 var app = require('express')();
 
+// config
+app.set('startDate', new Date());
+app.set('x-powered-by', false);
+
 // setup express middlewares
 require('./middlewares.js')(app);
 
