@@ -14,7 +14,7 @@ describe('/alive', function () {
     request(app)
       .get('/alive')
       .expect('Content-Type', /json/)
-      .expect(200, '{"alive":true}')
+      .expect(200)
       .end(done);
   });
 });
