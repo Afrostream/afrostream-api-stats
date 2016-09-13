@@ -20,7 +20,7 @@ exports.create = function (req, res) {
 
   var promises = req.body.events
     .map(function (event) {
-      var ip = event.ip || req.herokuclientip;
+      var ip = event.ip || req.userIp;
 
       var data = {
         eventType: event.type,

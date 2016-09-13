@@ -9,7 +9,7 @@ var mq = require('./event.mq.js')
   , database = require('./event.database.js');
 
 exports.create = function (req, res) {
-  var ip = req.body.ip || req.herokuclientip;
+  var ip = req.body.ip || req.userIp;
 
   var data = {
     eventType: req.body.type,

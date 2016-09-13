@@ -5,6 +5,8 @@ var compression = require('compression')
 
 var ev = require('express-validation');
 
+var middlewareUserIp = require('afrostream-node-middleware-userip');
+
 var config = rootRequire('/config');
 
 /**
@@ -19,7 +21,7 @@ module.exports = function (app) {
 
   // req.error error handler
   app.use(rootRequire('/lib/middleware-error')());
-  app.use(rootRequire('/lib/middleware-herokuclientip')());
+  app.use(middlewareUserIp());
 
   // parsing POST data
   app.use(compression());

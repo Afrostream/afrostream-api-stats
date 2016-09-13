@@ -29,7 +29,7 @@ router.get('/request-infos', function (req, res) {
     JSON.stringify(req.headers) + "\n" +
     'req.ip : ' + req.ip + "\n" +
     'req.ips : ' + JSON.stringify(req.ips) + "\n" +
-    'req.herokuclientip : ' + req.herokuclientip + "\n"
+    'req.userIp : ' + req.userIp + "\n"
   );
 });
 
