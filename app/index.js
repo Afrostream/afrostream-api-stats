@@ -25,6 +25,9 @@ app.set('x-powered-by', false);
 // setup express middlewares
 require('./middlewares.js')(app);
 
+// all routes are no cache.
+app.use(function (req, res, next) { res.noCache(); next(); });
+
 // routes
 require('./routes.js')(app);
 

@@ -6,6 +6,7 @@ var compression = require('compression')
 var ev = require('express-validation');
 
 var middlewareUserIp = require('afrostream-node-middleware-userip');
+var middlewareCacheHandler = require('afrostream-node-middleware-cachehandler');
 
 var config = rootRequire('/config');
 
@@ -29,6 +30,7 @@ module.exports = function (app) {
   app.use(bodyParser.json());
 
   //
+  app.use(middlewareCacheHandler());
   app.use(rootRequire('/lib/middleware-allowcrossdomain')({allowOrigin: config.allowOrigin}));
   app.use(rootRequire('/lib/middleware-jsoncontenttype')());
 

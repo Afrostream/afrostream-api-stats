@@ -2,6 +2,11 @@
   "name": "afrostream-api-stats",
   "version": "1.0.0",
   "dependencies": {
+    "afrostream-node-middleware-cachehandler": {
+      "version": "1.0.0",
+      "from": "git+https://afrostream-tech:d51e355769ddd0fd212084c35fb99f71ab4146b2@github.com/Afrostream/afrostream-node-middleware-cachehandler.git#v1.0.0",
+      "resolved": "git+https://afrostream-tech:d51e355769ddd0fd212084c35fb99f71ab4146b2@github.com/Afrostream/afrostream-node-middleware-cachehandler.git#4ce5c63026858b492e712e44f74c7e81e5180933"
+    },
     "afrostream-node-middleware-userip": {
       "version": "1.0.0",
       "from": "git+https://afrostream-tech:d51e355769ddd0fd212084c35fb99f71ab4146b2@github.com/Afrostream/afrostream-node-middleware-userip.git#v1.0.0",

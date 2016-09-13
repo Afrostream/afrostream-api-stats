@@ -21,6 +21,7 @@
   "homepage": "https://github.com/Afrostream/afrostream-api-stats#readme",
   "dependencies": {
     "afrostream-node-middleware-userip": "git+https://afrostream-tech:d51e355769ddd0fd212084c35fb99f71ab4146b2@github.com/Afrostream/afrostream-node-middleware-userip.git#v1.0.0",
+    "afrostream-node-middleware-cachehandler": "git+https://afrostream-tech:d51e355769ddd0fd212084c35fb99f71ab4146b2@github.com/Afrostream/afrostream-node-middleware-cachehandler.git#v1.0.0",
     "amqplib": "^0.4.0",
     "better-assert": "^1.0.2",
     "body-parser": "^1.14.0",
