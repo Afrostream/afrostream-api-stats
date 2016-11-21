@@ -9,6 +9,9 @@ var mq = require('./app/api/v1/event/event.mq.js')
 
 var Q = require('q');
 
+// should be injected
+var statsd = rootRequire('statsd');
+
 /**
  * Storing in redis the fact that the clientIsAlive
  *
@@ -154,6 +157,18 @@ var getActives = function () {
       }
     );
 };
+
+// adding some metrics :)
+setInterval(function () {
+  sessions.getActives()
+    .then(
+      function (sessions) {
+        statsd.client.gauge('sessions.actives', sessions && sessions.length || 0);
+      },
+      function (err) { /* nothing */ }
+    );
+}, 10000);
+
 
 module.exports.touch = touch;
 module.exports.getActives = getActives;
