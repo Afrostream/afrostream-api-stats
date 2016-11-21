@@ -28,6 +28,10 @@ require('./middlewares.js')(app);
 // all routes are no cache.
 app.use(function (req, res, next) { res.noCache(); next(); });
 
+// statsd
+var middlewareStatsd = rootRequire('statsd').middleware;
+app.use(middlewareStatsd());
+
 // routes
 require('./routes.js')(app);
 
