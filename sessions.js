@@ -160,7 +160,7 @@ var getActives = function () {
 
 // adding some metrics :)
 setInterval(function () {
-  sessions.getActives()
+  getActives()
     .then(
       function (sessions) {
         statsd.client.gauge('sessions.actives', sessions && sessions.length || 0);
