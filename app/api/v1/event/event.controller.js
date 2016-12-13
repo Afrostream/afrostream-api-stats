@@ -8,6 +8,8 @@ var mq = require('./event.mq.js')
   , session = require('./../../../../sessions.js')
   , database = require('./event.database.js');
 
+var statsd = rootRequire('statsd');
+
 exports.create = function (req, res) {
   var ip = req.body.ip || req.userIp;
 
@@ -29,6 +31,8 @@ exports.create = function (req, res) {
   if (data.eventType !== 'stop') {
     session.touch(data);
   }
+
+  statsd.client.increment('event.insert.'+req.body.type+'.hit');
 
   // insert event in the database
   database.insert(data)

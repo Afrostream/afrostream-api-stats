@@ -12,6 +12,8 @@ var mq = require('../event/event.mq.js')
   , session = require('../../../../sessions.js')
   , database = require('../event/event.database.js');
 
+var statsd = rootRequire('statsd');
+
 exports.create = function (req, res) {
   assert(req.body && Array.isArray(req.body.events));
 
@@ -40,6 +42,8 @@ exports.create = function (req, res) {
       if (data.eventType !== 'stop') {
         session.touch(data);
       }
+
+      statsd.client.increment('event.insert.'+event.type+'.hit');
 
       // insert event in the database
       return database.insert(data);
